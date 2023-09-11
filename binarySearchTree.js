@@ -134,22 +134,106 @@ class Tree {
 }
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
-        return;
+        return "";
     }
+
+    let result = "";
+
     if (node.right !== null) {
-        prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+        result += prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
+
+    result += `${prefix}${isLeft ? "└── " : "┌── "}${node.value}\n`;
+
     if (node.left !== null) {
-        prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+        result += prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
+
+    return result;
 };
 
-const arr = [10, 5, 15, 2, 13, 22, 1, 14];
-const tree = new Tree(arr);
-prettyPrint(tree.root);
 
-// console.log(tree.levelOrder());
-// console.log(tree.inOrder())
-// console.log(tree.preOrder())
-console.log(tree.postOrder())
+class UIManager {
+    constructor() {
+        this.tree = null;
+        this.input = document.getElementById("input");
+        this.output = document.getElementsByClassName("output");
+        this.insertButton = document.getElementById("insert");
+        this.deleteButton = document.getElementById("delete");
+        this.clearButton = document.getElementById("clear");
+
+        this.inOrderOutput = document.getElementById("inorder");
+        this.preOrderOutput = document.getElementById("preorder");
+        this.postOrderOutput = document.getElementById("postorder");
+        this.levelOrderOutput = document.getElementById("levelorder");
+        this.prettyOutput = document.getElementById("pretty-output");
+
+        this.insertButton.addEventListener("click", this.insert.bind(this));
+        this.deleteButton.addEventListener("click", this.delete.bind(this));
+        this.clearButton.addEventListener("click", this.clear.bind(this));
+    }
+
+    insert() {
+        const value = this.input.value;
+        if (value === "") {
+            return;
+        }
+        if (this.tree === null) {
+            this.tree = new Tree([value]);
+        } else {
+            this.tree.insert(value);
+        }
+        this.input.value = "";
+        this.print();
+    }
+
+    delete() {
+        const value = this.input.value;
+        if (value === "") {
+            return;
+        }
+        if (this.tree === null) {
+            return;
+        }
+        this.tree.delete(value);
+        this.input.value = "";
+        this.print();
+    }
+
+    clear() {
+        this.tree = null;
+        this.input.value = "";
+        this.print();
+    }
+
+
+
+    print() {
+        if (this.tree === null) {
+            this.output.innerHTML = "";
+            this.inOrderOutput.textContent = "In-Order: ";
+            this.preOrderOutput.textContent = "Pre-Order: ";
+            this.postOrderOutput.textContent = "Post-Order: ";
+            this.levelOrderOutput.textContent = "Level-Order: ";
+            this.prettyOutput.textContent = "";
+            return;
+        }
+
+        // Perform the tree traversals and pretty print
+        const inOrderString = this.tree.inOrder();
+        const preOrderString = this.tree.preOrder();
+        const postOrderString = this.tree.postOrder();
+        const levelOrderString = this.tree.levelOrder();
+        const prettyPrintString = prettyPrint(this.tree.root);
+
+        this.output.innerHTML = levelOrderString;
+        this.inOrderOutput.textContent = "In-Order: " + inOrderString;
+        this.preOrderOutput.textContent = "Pre-Order: " + preOrderString;
+        this.postOrderOutput.textContent = "Post-Order: " + postOrderString;
+        this.levelOrderOutput.textContent = "Level-Order: " + levelOrderString;
+        this.prettyOutput.textContent = prettyPrintString;
+    }}
+
+const uiManager = new UIManager();
+
+
