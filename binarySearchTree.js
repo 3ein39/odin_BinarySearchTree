@@ -43,6 +43,39 @@ class Tree {
             }
         }
     }
+
+    // delete using successor recursively
+    delete(value) {
+        this.root = this.deleteNode(this.root, value);
+    }
+    deleteNode(node, value) {
+        if (node === null) {
+            return null;
+        }
+        if (value < node.value) {
+            node.left = this.deleteNode(node.left, value);
+        } else if (value > node.value) {
+            node.right = this.deleteNode(node.right, value);
+        } else {
+            // the 4 cases
+            if (node.left === null) {
+                return node.right;
+            } else if (node.right === null) {
+                return node.left;
+            }
+            node.value = this.minValue(node.right);
+            node.right = this.deleteNode(node.right, node.value);
+        }
+        return node;
+    }
+    minValue(node) {
+        let min = node.value;
+        while (node.left !== null) {
+            min = node.left.value;
+            node = node.left;
+        }
+        return min;
+    }
 }
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -59,4 +92,6 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 const arr = [10, 5, 15, 2, 13, 22, 1, 14];
 const tree = new Tree(arr);
+prettyPrint(tree.root);
+tree.delete(10);
 prettyPrint(tree.root);
