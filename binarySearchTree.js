@@ -76,6 +76,53 @@ class Tree {
         }
         return min;
     }
+
+    // the traversal methods constructing the string
+    levelOrder(node = this.root, string = "") {
+        if (node === null) {
+            return;
+        }
+        const queue = [];
+        queue.push(node);
+        while (queue.length > 0) {
+            const currentNode = queue.shift();
+            string += currentNode.value + " ";
+            if (currentNode.left !== null) {
+                queue.push(currentNode.left);
+            }
+            if (currentNode.right !== null) {
+                queue.push(currentNode.right);
+            }
+        }
+        console.log(string);
+    }
+    inOrder(node = this.root, string = "") {
+        if (node === null) {
+            return;
+        }
+        this.inOrder(node.left, string);
+        string += node.value + " ";
+        this.inOrder(node.right, string);
+        console.log(string);
+    }
+    preOrder(node = this.root, string = "") {
+        if (node === null) {
+            return;
+        }
+        string += node.value + " ";
+        this.preOrder(node.left, string);
+        this.preOrder(node.right, string);
+        console.log(string);
+    }
+    postOrder(node = this.root, string = "") {
+        if (node === null) {
+            return;
+        }
+        this.postOrder(node.left, string);
+        this.postOrder(node.right, string);
+        string += node.value + " ";
+        console.log(string);
+    }
 }
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -93,5 +140,8 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 const arr = [10, 5, 15, 2, 13, 22, 1, 14];
 const tree = new Tree(arr);
 prettyPrint(tree.root);
-tree.delete(10);
-prettyPrint(tree.root);
+
+tree.levelOrder();
+// tree.inOrder();
+// tree.preOrder();
+// tree.postOrder();
