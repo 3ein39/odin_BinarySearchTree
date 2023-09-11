@@ -94,34 +94,42 @@ class Tree {
                 queue.push(currentNode.right);
             }
         }
-        console.log(string);
+        return string;
     }
     inOrder(node = this.root, string = "") {
         if (node === null) {
-            return;
+            return string;
         }
-        this.inOrder(node.left, string);
+
+        // Recursively traverse the left subtree and append to string
+        string = this.inOrder(node.left, string);
+
+        // Append the current node's value to the string
         string += node.value + " ";
-        this.inOrder(node.right, string);
-        console.log(string);
+
+        // Recursively traverse the right subtree and append to string
+        string = this.inOrder(node.right, string);
+
+        // Return the updated string
+        return string;
     }
     preOrder(node = this.root, string = "") {
         if (node === null) {
-            return;
+            return string;
         }
         string += node.value + " ";
-        this.preOrder(node.left, string);
-        this.preOrder(node.right, string);
-        console.log(string);
+        string = this.preOrder(node.left, string);
+        string = this.preOrder(node.right, string);
+        return string;
     }
     postOrder(node = this.root, string = "") {
         if (node === null) {
-            return;
+            return string;
         }
-        this.postOrder(node.left, string);
-        this.postOrder(node.right, string);
+        string = this.postOrder(node.left, string);
+        string = this.postOrder(node.right, string);
         string += node.value + " ";
-        console.log(string);
+        return string;
     }
 }
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -141,7 +149,7 @@ const arr = [10, 5, 15, 2, 13, 22, 1, 14];
 const tree = new Tree(arr);
 prettyPrint(tree.root);
 
-tree.levelOrder();
-// tree.inOrder();
-// tree.preOrder();
-// tree.postOrder();
+// console.log(tree.levelOrder());
+// console.log(tree.inOrder())
+// console.log(tree.preOrder())
+console.log(tree.postOrder())
